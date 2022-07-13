@@ -6,6 +6,7 @@ import './App.css';
 import React, {useState} from 'react';
 import {UserContext} from './util/UserContext';
 import Homepage from './pages/Homepage';
+import SignInPage from './pages/SignInPage';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({
@@ -15,16 +16,26 @@ function App() {
     profileImg: '',
   });
 
+  const noUserLoggedIn = (): boolean => {
+    return Object.values(currentUser).every(x => x === null || x === '');
+  }
+
   return (
-    <UserContext.Provider value={currentUser}>
     <div>
       <header className="App-header">
-        <Routes>
-          <Route path="/" element={<Homepage/>}/>
-        </Routes>
-      </header>
+        {noUserLoggedIn() ?
+          <SignInPage/>
+        :
+          <UserContext.Provider value={currentUser}>
+          
+              <Routes>
+                <Route path="/" element={<Homepage/>}/>
+              </Routes>
+          
+          </UserContext.Provider>
+        }
+     </header>
     </div>
-    </UserContext.Provider>
   );
 }
 
