@@ -4,14 +4,32 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
+import {ThemeProvider, createTheme} from '@mui/material';
+
+// This theme doesnt work for some reason
+const theme = createTheme({
+    typography: {
+      fontFamily: ['"Gilroy-Regular"', 'sans-serif'].join(',')
+     },
+     palette:{
+       primary: {
+        main: '#056D78'
+      },
+      secondary: {
+        main: '#2F4051'
+      }
+     }
+})
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <ThemeProvider theme={theme}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </ThemeProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
