@@ -14,7 +14,7 @@ import {
     Stack
 } from '@mui/material';
 import GoogleIcon from '../../assets/GoogleIcon.svg';
-import './style.css'
+import './style.css';
 
 const clientConfig = { client_id: '945406263981-q6r8d575nd6orns70p25s95l92odtrrq.apps.googleusercontent.com' }
 
@@ -36,12 +36,9 @@ export default function GoogleLoginComponent(props: any){
             email: googleUser.getBasicProfile().getEmail(),
             profileImg:googleUser.getBasicProfile().getImageUrl(),
         }
+        localStorage.setItem('currentUser', JSON.stringify(newUser));
         setUser(newUser);
         navigate("/");
-
-
-        // Make user login in your system
-        // login success tracking...
     }
 
     const preLoginTracking = (): void => {
