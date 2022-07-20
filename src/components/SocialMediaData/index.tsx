@@ -4,6 +4,7 @@ import {
     Chip,
     FormControl,
     InputLabel,
+    ListItemIcon,
     MenuItem,
     Paper,
     Select,
@@ -13,6 +14,7 @@ import {
     Typography
 } from '@mui/material';
 import React from 'react';
+import twitterIcon from '../../assets/twitterIcon.svg';
 
 export default function SocialMediaData(){
     const [platform, setPlatform] = React.useState('');
@@ -33,23 +35,32 @@ export default function SocialMediaData(){
     const removeKeyword = (index: number) => {
         let keywordsCopy = keywords.slice();
         keywordsCopy.splice(index, 1);
-        console.log("Index ", index," split array ", keywordsCopy);
         addKeywords(keywordsCopy);
+    }
+
+    const startSocialMediaSearch = () => {
+        console.log("Platform is ", platform);
     }
     
     return(
-        <Paper elevation={2} sx={{padding:2}}>
+        <Paper elevation={2} sx={{padding:4}}>
             <Typography variant="h5">Select a platform to search</Typography>
             <FormControl sx={{marginTop:1}} fullWidth>
-                <InputLabel id="demo-simple-select-label">Platform</InputLabel>
+                <InputLabel id="social-media-platform-label">Platform</InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
+                    labelId="social-media-platform-label"
+                    id="social-media-platform-select"
                     value={platform}
                     label="Platform"
                     onChange={handleChange}
-                >
-                    <MenuItem value="Twitter">Twitter</MenuItem>
+                    sx={{width:'100%', display: 'flex'}}>
+                    <MenuItem value="Twitter" >
+                        <Box sx={{display: 'flex',alignItems: "center"}}>
+                            <Box sx={{height:"25px", marginRight:"12px"}} component="img" src={twitterIcon}/>
+                            Twitter
+                        </Box>
+                        
+                    </MenuItem>
                 </Select>
             </FormControl>
             {displayKeywordSearch ? 
@@ -73,6 +84,11 @@ export default function SocialMediaData(){
                     ></TextField>
                     <Button variant="contained" sx={{height:"3.5rem"}} onClick={() => addKeyword()}>Add</Button>
                 </Stack>
+                {keywords.length >=1 ? 
+                <Button variant="contained" onClick={() => {startSocialMediaSearch()}}>Start</Button>
+                :
+                <></>
+                }
                 
             </Box>
             : <></>

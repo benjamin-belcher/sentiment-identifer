@@ -34,7 +34,7 @@ export default function UserStorage(){
 
     const context = useContext(UserContext) as UserContextType;
     return(
-        <Paper elevation={2} sx={{padding:2}}>
+        <Paper elevation={2} sx={{padding:4}}>
             <Typography variant="h5">Open a file from Google Drive</Typography>
             <Button variant="contained" onClick={() => handleOpenPicker()}>Select</Button>
         </Paper>
