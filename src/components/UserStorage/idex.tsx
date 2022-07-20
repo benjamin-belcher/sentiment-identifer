@@ -14,8 +14,8 @@ export default function UserStorage(){
     // const customViewsArray = [new google.picker.DocsView()]; // custom view
     const handleOpenPicker = () => {
         openPicker({
-        clientId: "945406263981-q6r8d575nd6orns70p25s95l92odtrrq.apps.googleusercontent.com",
-        developerKey: "AIzaSyCT9UDBnTsTbT2MTpmFBN8DwUK19KtUYvY",
+        clientId: process.env.REACT_APP_GOOGLE_CLOUD_CLIENT_ID || '',
+        developerKey: process.env.REACT_APP_GOOGLE_CLOUD_API_KEY || '',
         viewId: "DOCS",
         // token: token, // pass oauth token in case you already have one
         showUploadView: true,

@@ -16,7 +16,7 @@ import {
 import GoogleIcon from '../../assets/GoogleIcon.svg';
 import './style.css';
 
-const clientConfig = { client_id: '945406263981-q6r8d575nd6orns70p25s95l92odtrrq.apps.googleusercontent.com' }
+const clientConfig = { client_id: process.env.REACT_APP_GOOGLE_CLOUD_CLIENT_ID  }
 
 export default function GoogleLoginComponent(props: any){
     const {setUser} = useContext(UserContext) as UserContextType;
