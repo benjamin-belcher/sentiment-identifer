@@ -19,6 +19,7 @@ import axios from 'axios';
 import React from 'react';
 import twitterIcon from '../../assets/twitterIcon.svg';
 import {localBackendAPI} from '../../util/constants/BaseAPIEndpoints';
+import { Navigate } from 'react-router-dom';
 
 export default function SocialMediaData(){
     const [platform, setPlatform] = React.useState('');
@@ -68,6 +69,10 @@ export default function SocialMediaData(){
                     })
         }
     }
+
+    const onSeeTweetsClicked = () => {
+        
+    }
     
     return(
         <Paper elevation={2} sx={{padding:4}}>
@@ -76,6 +81,7 @@ export default function SocialMediaData(){
             <FormControl sx={{marginTop:1}} fullWidth>
                 <InputLabel id="social-media-platform-label">Platform</InputLabel>
                 <Select
+                    disabled={loading}
                     labelId="social-media-platform-label"
                     id="social-media-platform-select"
                     value={platform}
@@ -96,13 +102,14 @@ export default function SocialMediaData(){
                 <Stack spacing={1} direction="row" sx={{marginBottom:1}}>
                     {keywords.map((keyword, index) => {
                         return (
-                            <Chip key={index} label={keyword} onClick={() =>{removeKeyword(index)}}/>
+                            <Chip disabled={loading} key={index} label={keyword} onClick={() =>{removeKeyword(index)}}/>
                         );
                     })}
                 </Stack>
                 
                 <Stack direction="row" spacing={1}>
                     <TextField 
+                        disabled={loading}
                         variant='outlined' 
                         label="Keywords" 
                         value={keywordInput}
@@ -114,6 +121,7 @@ export default function SocialMediaData(){
                 </Stack>
                 {keywords.length >=1 ? 
                     <TextField 
+                        disabled={loading}
                         sx={{marginTop:3}}
                         InputProps={{ inputProps:{type:'number', min:0, max:100} }} 
                         label="Number of Posts"
@@ -126,7 +134,7 @@ export default function SocialMediaData(){
                 <Box>
                     <Divider sx={{marginTop:2, marginBottom:2}}/>
                     {tweets.length > 0 ?
-                        <Button variant="contained">See Tweets</Button>
+                        <Button variant="contained" onClick={() => {onSeeTweetsClicked()}}>See Tweets</Button>
                     :
                         <LoadingButton variant="contained" loading={loading} onClick={() => {startSocialMediaSearch()}}>Start</LoadingButton>
                     }
