@@ -5,22 +5,35 @@ import { UserContextType } from '../../util/UserContextType';
 import {useNavigate} from 'react-router-dom';
 import NavigationSideBar from '../../components/Sidebar';
 import {
-    Box
+    Box, Button
 } from '@mui/material';
+import axios from 'axios';
+import {localBackendAPI} from '../../util/constants/BaseAPIEndpoints';
 
 export default function Homepage(props: any){
+    
     const context = useContext(UserContext) as UserContextType;
     const navigate = useNavigate();
 
-    // Redirect to signin page if there is no user
-    // React.useEffect(() => {
-    //     if(context.currentUser.id === ''){
-    //         navigate("/signin");
-    //     }
-    // })
+    const testAPI = () => {
+        axios.post(localBackendAPI, {
+            "data":[
+                {
+                    "text":"testing the model is easy and simple",
+                },
+                {
+                    "text":"I HATE fast food, its terrible!",
+                }
+            ]
+        })
+        .then(res => {
+            console.log(res);
+        })
+    }
     return(
         <Box>
             <h1>Hello {context.currentUser.firstname}</h1>
+            <Button onClick={() => {testAPI()}}>Test API</Button>
         </Box>
         
     )

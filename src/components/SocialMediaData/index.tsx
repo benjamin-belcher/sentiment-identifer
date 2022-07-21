@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Chip,
+    Divider,
     FormControl,
     InputLabel,
     ListItemIcon,
@@ -11,16 +12,22 @@ import {
     SelectChangeEvent,
     Stack,
     TextField,
-    Typography
+    Typography,
 } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import axios from 'axios';
 import React from 'react';
 import twitterIcon from '../../assets/twitterIcon.svg';
+import {localBackendAPI} from '../../util/constants/BaseAPIEndpoints';
 
 export default function SocialMediaData(){
     const [platform, setPlatform] = React.useState('');
     const [displayKeywordSearch, setDisplayKeywordSearch] = React.useState(false);
     const [keywords, addKeywords] = React.useState<string[]>([]);
+    const [numberOfPosts, setNumberOfPosts] =React.useState(0);
     const [keywordInput, setKeywordInput] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
+    const [tweets, setTweets] = React.useState([]);
 
     const handleChange = (event: SelectChangeEvent) => {
         setPlatform(event.target.value as string);
@@ -38,13 +45,34 @@ export default function SocialMediaData(){
         addKeywords(keywordsCopy);
     }
 
+    // Validation for the number inputs to only allow numbers between 0 & 100
+    const handleNumberInput = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setState:  React.Dispatch<React.SetStateAction<number>>) => {
+        const val = parseInt(e.target.value);
+        if(e.target.value.toString() === "" || !isNaN(val) && val <= 100){
+            setState(val);
+        }
+    }
+
     const startSocialMediaSearch = () => {
-        console.log("Platform is ", platform);
+        setLoading(true);
+        switch(platform){
+            case "Twitter":
+                axios.post(localBackendAPI+"tweet/search", {
+                    "keyword":keywords[0],
+                    "numberOfTweets": numberOfPosts
+                })
+                    .then(response => {
+                        console.log(response);
+                        setTweets(response.data);
+                        setLoading(false);
+                    })
+        }
     }
     
     return(
         <Paper elevation={2} sx={{padding:4}}>
             <Typography variant="h5">Select a platform to search</Typography>
+            <Divider sx={{marginTop:2, marginBottom:2}}/>
             <FormControl sx={{marginTop:1}} fullWidth>
                 <InputLabel id="social-media-platform-label">Platform</InputLabel>
                 <Select
@@ -85,7 +113,24 @@ export default function SocialMediaData(){
                     <Button variant="contained" sx={{height:"3.5rem"}} onClick={() => addKeyword()}>Add</Button>
                 </Stack>
                 {keywords.length >=1 ? 
-                <Button variant="contained" onClick={() => {startSocialMediaSearch()}}>Start</Button>
+                    <TextField 
+                        sx={{marginTop:3}}
+                        InputProps={{ inputProps:{type:'number', min:0, max:100} }} 
+                        label="Number of Posts"
+                        variant='outlined' 
+                        value={numberOfPosts} 
+                        onChange={(e) => {handleNumberInput(e, setNumberOfPosts)}}/>
+                : <></>
+                }
+                {numberOfPosts >=1 ? 
+                <Box>
+                    <Divider sx={{marginTop:2, marginBottom:2}}/>
+                    {tweets.length > 0 ?
+                        <Button variant="contained">See Tweets</Button>
+                    :
+                        <LoadingButton variant="contained" loading={loading} onClick={() => {startSocialMediaSearch()}}>Start</LoadingButton>
+                    }
+                </Box>
                 :
                 <></>
                 }

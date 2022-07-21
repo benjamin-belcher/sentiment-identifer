@@ -1,0 +1,1 @@
+export const localBackendAPI = "http://localhost:8000/api/";
