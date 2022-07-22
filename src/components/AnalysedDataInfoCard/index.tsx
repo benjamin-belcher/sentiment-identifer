@@ -6,16 +6,15 @@ import {
     Divider
 } from '@mui/material';
 import React from 'react';
+import { IAnalysedData } from '../../interfaces/IAnalysedData';
 
-export default function AnalysedDataInfoCard(props: any){
+export default function AnalysedDataInfoCard(props: IAnalysedData[]){
     
     const calculateAverageData = (propertyName: string) =>{
-        const hashmap = props.analysedData.reduce( (acc: any, val: any) => {
-            acc[val] = (acc[val] || 0 ) + 1;
-            return acc;
-         },{})
-         console.log(Object.keys(hashmap).reduce((a, b) => hashmap[a] > hashmap[b] ? a : b));
-        return Object.keys(hashmap).reduce((a, b) => hashmap[a] > hashmap[b] ? a : b)
+        const
+        props.forEach(label => {
+
+        })
     }
     return(
         <Card sx={{minWidth:275}}>
