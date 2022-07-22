@@ -1,31 +1,22 @@
 import React from 'react';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar  } from '@mui/x-data-grid';
+import {IDataTableProps} from '../../interfaces/IDataTableProps';
+import {Box} from '@mui/material';
 
-interface DataTableProps{
-  "columns":
-  [
-    {
-      "field": string,
-      "headerName": string,
-      "width": number,
-    }
-  ],
-  "rows": 
-  [
-    {
-      // Empty object here as row data can be different
-    }
-  ]
-}
-
-export default function DataTable(props:DataTableProps){
+export default function DataTable(props:IDataTableProps){
     return(
+      <Box sx={{height:"60%"}}>
         <DataGrid
-            rows={props.rows}
-            columns={props.columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            rows={props.rows|| [{}]}
+            columns={props.columns|| [{"field": "","headerName": "","width": 0}]}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
             checkboxSelection
+            components={{
+              Toolbar: GridToolbar,
+            }}
       />
+      </Box>
+        
     )
 }

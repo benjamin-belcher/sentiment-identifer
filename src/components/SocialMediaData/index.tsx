@@ -21,7 +21,7 @@ import twitterIcon from '../../assets/twitterIcon.svg';
 import {localBackendAPI} from '../../util/constants/BaseAPIEndpoints';
 import { Navigate } from 'react-router-dom';
 
-export default function SocialMediaData(){
+export default function SocialMediaData(props: any){
     const [platform, setPlatform] = React.useState('');
     const [displayKeywordSearch, setDisplayKeywordSearch] = React.useState(false);
     const [keywords, addKeywords] = React.useState<string[]>([]);
@@ -65,13 +65,28 @@ export default function SocialMediaData(){
                     .then(response => {
                         console.log(response);
                         setTweets(response.data);
+                        props.setDataToDisplay({
+                            "columns":[
+                                {
+                                    "field": "text",
+                                    "headerName": "Tweet",
+                                    "width": 1200,
+                                },
+                                {
+                                    "field": "posted_at",
+                                    "headerName": "Date Posted",
+                                    "width": 180,
+                                }
+                            ],
+                            "rows": response.data
+                        });
                         setLoading(false);
                     })
         }
     }
 
     const onSeeTweetsClicked = () => {
-        
+        props.reviewData();
     }
     
     return(
