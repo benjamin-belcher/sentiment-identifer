@@ -1,6 +1,6 @@
 import React from 'react';
 import { DataGrid, GridToolbar  } from '@mui/x-data-grid';
-import {IDataTableProps} from '../../interfaces/IDataTableProps';
+import {IDataTableProps} from '../../interfaces/props/IDataTableProps';
 import {Box} from '@mui/material';
 
 export default function DataTable(props:IDataTableProps){

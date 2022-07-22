@@ -8,3 +8,13 @@ export interface IAnalysedData
     subjectivity_label: string,
     text: string,
 }
+
+export const emptyIAnalysedData = [{
+    id: 0,
+    posted_at: "",
+    sentiment: 0,
+    sentiment_label: "",
+    subjectivity: 0,
+    subjectivity_label: "",
+    text: "",
+}]

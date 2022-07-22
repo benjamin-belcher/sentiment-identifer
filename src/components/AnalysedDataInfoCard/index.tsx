@@ -6,24 +6,19 @@ import {
     Divider
 } from '@mui/material';
 import React from 'react';
-import { IAnalysedData } from '../../interfaces/IAnalysedData';
+import { IAnalysedDataCardProps } from '../../interfaces/props/IAnalysedDataCardProps';
 
-export default function AnalysedDataInfoCard(props: IAnalysedData[]){
+export default function AnalysedDataInfoCard(props: IAnalysedDataCardProps){
     
-    const calculateAverageData = (propertyName: string) =>{
-        const
-        props.forEach(label => {
-
-        })
-    }
+    
     return(
         <Card sx={{minWidth:275}}>
             <CardContent>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Average Sentiment</Typography>
-            <Typography variant="h5" component="div">{calculateAverageData("sentiment_label")}</Typography>
+            <Typography variant="h5" component="div">{props.averageSentiment}</Typography>
             <Divider sx={{marginTop:2, marginBottom:2}}/>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Average Subjectivity</Typography>
-            <Typography variant="h5" component="div">{calculateAverageData("subjectivity_label")}</Typography>
+            <Typography variant="h5" component="div">{props.averageSentiment}</Typography>
             </CardContent>
         </Card>
     )

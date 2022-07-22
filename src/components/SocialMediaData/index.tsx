@@ -63,7 +63,6 @@ export default function SocialMediaData(props: any){
                     "numberOfTweets": numberOfPosts
                 })
                     .then(response => {
-                        console.log(response);
                         setTweets(response.data);
                         props.setDataToDisplay({
                             "columns":[
