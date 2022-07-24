@@ -24,8 +24,10 @@ export default function NewAnalysisPage(){
     const [activeStep, setActiveStep] = React.useState(0);
     const [dataToDisplay, setDataToDisplay] = React.useState<IDataTableProps>();
     const [analysedData, setAnalysedData] = React.useState<IAnalysedData[]>();
-    const [cumulatedSentimentData, setCumulatedSentimentData] = React.useState<Map<string, number>>(new Map());
-    const [cumulatedSubjectivityData, setCumulatedSubjectivityData] = React.useState<Map<string, number>>(new Map());
+    const [cumulatedSentimentData, setCumulatedSentimentData] = React.useState<IAnalysedData[]>();
+    const [cumulatedSubjectivityData, setCumulatedSubjectivityData] = React.useState<IAnalysedData[]>();
+    const [averageSentiment, setAverageSentiment] = React.useState({});
+    const [averageSubjectivity, setAverageSubjectivity]= React.useState({});
     
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -38,15 +40,20 @@ export default function NewAnalysisPage(){
     const calculateAverageData = (dataToCalculate:string) =>{
         console.log(analysedData);
         let map;
+        let arr : Array<IAnalysedData>;
         switch(dataToCalculate){
             case "sentiment":
                 map = analysedData?.reduce((acc, e) => acc.set(e.sentiment_label, (acc.get(e.sentiment_label) || 0) + 1), new Map());
-                console.log(map);
-                return map;
+                arr = Array.from(map, ([key, value]) =>{
+                    return {[key]: value};
+                });
+                return arr;
             case "subjectivity":
                 map = analysedData?.reduce((acc, e) => acc.set(e.subjectivity_label, (acc.get(e.subjectivity_label) || 0) + 1), new Map());
-                console.log(map);
-                return map;
+                arr = Array.from(map, ([key, value]) =>{
+                    return {[key]: value};
+                })
+                return arr;
         }
     }
 
@@ -56,6 +63,9 @@ export default function NewAnalysisPage(){
                 setAnalysedData(response.data.data); 
                 setCumulatedSentimentData(calculateAverageData("sentiment")!);
                 setCumulatedSubjectivityData(calculateAverageData("subjectivity")!);
+
+                setAverageSentiment([...calculateAverageData("sentiment")!.entries()].reduce((acc, data) => acc = acc > data[0].sentiment_label ? acc : data.[1].sentiment_label, 0));
+                setAverageSubjectivity([...calculateAverageData("subjectivity")!.entries()].reduce((a, e ) => e[1] > a[1] ? e : a));
                 handleNext()});
     }
 
@@ -91,7 +101,7 @@ export default function NewAnalysisPage(){
             element:(
                 <>
                     <Typography variant="h4" sx={{marginBottom:2}}>Your Results</Typography>
-                    <AnalysedDataInfoCard averageSentiment={Math.max(...cumulatedSentimentData.values())} averageSubjectivity={Math.max(...cumulatedSubjectivityData.values())} />
+                    <AnalysedDataInfoCard averageSentiment={averageSentiment} averageSubjectivity={averageSubjectivity} />
                 </>
             )
         }
