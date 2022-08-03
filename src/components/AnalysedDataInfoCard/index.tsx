@@ -10,7 +10,7 @@ import { IAnalysedDataCardProps } from '../../interfaces/props/IAnalysedDataCard
 
 export default function AnalysedDataInfoCard(props: IAnalysedDataCardProps){
     React.useEffect(() => {
-        // console.log(props.averageSentiment[0]);
+        console.log(props.averageSentiment);
     })
     
     

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {
     Box, 
     Divider, 
@@ -19,13 +19,14 @@ import axios from "axios";
 import {localBackendAPI} from '../../util/constants/BaseAPIEndpoints';
 import { IAnalysedData, emptyIAnalysedData } from "../../interfaces/IAnalysedData";
 import AnalysedDataInfoCard from "../../components/AnalysedDataInfoCard";
+import { Map } from "typescript";
 
 export default function NewAnalysisPage(){
     const [activeStep, setActiveStep] = React.useState(0);
     const [dataToDisplay, setDataToDisplay] = React.useState<IDataTableProps>();
-    const [analysedData, setAnalysedData] = React.useState<IAnalysedData[]>();
-    const [cumulatedSentimentData, setCumulatedSentimentData] = React.useState<IAnalysedData[]>();
-    const [cumulatedSubjectivityData, setCumulatedSubjectivityData] = React.useState<IAnalysedData[]>();
+    const [analysedData, setAnalysedData] = React.useState<IAnalysedData[]>(emptyIAnalysedData);
+    const [cumulatedSentimentData, setCumulatedSentimentData] = React.useState<any[]>([]);
+    const [cumulatedSubjectivityData, setCumulatedSubjectivityData] = React.useState<any[]>([]);
     const [averageSentiment, setAverageSentiment] = React.useState({});
     const [averageSubjectivity, setAverageSubjectivity]= React.useState({});
     
@@ -37,23 +38,39 @@ export default function NewAnalysisPage(){
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
+    useEffect(() => {
+        if(analysedData.length> 1){
+            setCumulatedSentimentData(calculateAverageData("sentiment")!);
+            setCumulatedSubjectivityData(calculateAverageData("subjectivity")!);
+        }
+        else{
+            return;
+        }
+        
+    }, [analysedData])
+
+    useEffect(() => {
+        if(cumulatedSentimentData.length > 1) {
+            console.log("Sentiment ",cumulatedSentimentData);
+            console.log([...calculateAverageData("sentiment")!.entries()].reduce((a, e ) => e[1] > a[1] ? e : a));
+            setAverageSentiment([...calculateAverageData("sentiment")!.entries()].reduce((a, e ) => e[1] > a[1] ? e : a));
+            setAverageSubjectivity([...calculateAverageData("subjectivity")!.entries()].reduce((a, e ) => e[1] > a[1] ? e : a));
+        }
+        else{
+            return;
+        }   
+    }, [cumulatedSentimentData])
+
     const calculateAverageData = (dataToCalculate:string) =>{
-        console.log(analysedData);
-        let map;
-        let arr : Array<IAnalysedData>;
         switch(dataToCalculate){
             case "sentiment":
-                map = analysedData?.reduce((acc, e) => acc.set(e.sentiment_label, (acc.get(e.sentiment_label) || 0) + 1), new Map());
-                arr = Array.from(map, ([key, value]) =>{
-                    return {[key]: value};
-                });
-                return arr;
+                let sentimentMap = analysedData.reduce((acc, e) => acc.set(e.sentiment_label, (acc.get(e.sentiment_label) || 0) + 1), new Map());
+                const sentimentArr = [...sentimentMap].map(([label, value]) => ({ label, value }));
+                return sentimentArr;
             case "subjectivity":
-                map = analysedData?.reduce((acc, e) => acc.set(e.subjectivity_label, (acc.get(e.subjectivity_label) || 0) + 1), new Map());
-                arr = Array.from(map, ([key, value]) =>{
-                    return {[key]: value};
-                })
-                return arr;
+                let subjectivityMap = analysedData?.reduce((acc, e) => acc.set(e.subjectivity_label, (acc.get(e.subjectivity_label) || 0) + 1), new Map());
+                const subjectivityArr = [...subjectivityMap].map(([label, value]) => ({ label, value }));
+                return subjectivityArr;
         }
     }
 
@@ -61,11 +78,6 @@ export default function NewAnalysisPage(){
         axios.post(localBackendAPI+"analyse", {"data":dataToDisplay?.rows})
             .then(response => {
                 setAnalysedData(response.data.data); 
-                setCumulatedSentimentData(calculateAverageData("sentiment")!);
-                setCumulatedSubjectivityData(calculateAverageData("subjectivity")!);
-
-                setAverageSentiment([...calculateAverageData("sentiment")!.entries()].reduce((acc, data) => acc = acc > data[0].sentiment_label ? acc : data.[1].sentiment_label, 0));
-                setAverageSubjectivity([...calculateAverageData("subjectivity")!.entries()].reduce((a, e ) => e[1] > a[1] ? e : a));
                 handleNext()});
     }
 
