@@ -18,10 +18,10 @@ export default function AnalysedDataInfoCard(props: IAnalysedDataCardProps){
         <Card sx={{minWidth:275}}>
             <CardContent>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Average Sentiment</Typography>
-            <Typography variant="h5" component="div"></Typography>
+            <Typography variant="h5" component="div">{props.averageSentiment.label}</Typography>
             <Divider sx={{marginTop:2, marginBottom:2}}/>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>Average Subjectivity</Typography>
-            <Typography variant="h5" component="div"></Typography>
+            <Typography variant="h5" component="div">{props.averageSubjectivity.label}</Typography>
             </CardContent>
         </Card>
     )

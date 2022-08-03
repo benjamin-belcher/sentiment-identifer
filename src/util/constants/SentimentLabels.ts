@@ -1,0 +1,1 @@
+export const SentimentLabels = ["Very Negative","Mostly Negative", "Neutral", "Mostly Positive", "Very Positive"];

@@ -18,6 +18,7 @@
     "@types/react-dom": "^18.0.6",
     "axios": "^0.27.2",
     "react": "^18.2.0",
+    "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",
     "react-google-drive-picker": "^1.2.0",
     "react-router-dom": "^6.3.0",
@@ -27,7 +28,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "PORT=3500 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

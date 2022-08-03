@@ -20,6 +20,10 @@ import {localBackendAPI} from '../../util/constants/BaseAPIEndpoints';
 import { IAnalysedData, emptyIAnalysedData } from "../../interfaces/IAnalysedData";
 import AnalysedDataInfoCard from "../../components/AnalysedDataInfoCard";
 import { Map } from "typescript";
+import Charts from "../../components/Charts";
+import { SentimentLabels } from "../../util/constants/SentimentLabels";
+import { DataArray } from "@mui/icons-material";
+import { IChartData } from "../../interfaces/IChartData";
 
 export default function NewAnalysisPage(){
     const [activeStep, setActiveStep] = React.useState(0);
@@ -27,8 +31,9 @@ export default function NewAnalysisPage(){
     const [analysedData, setAnalysedData] = React.useState<IAnalysedData[]>(emptyIAnalysedData);
     const [cumulatedSentimentData, setCumulatedSentimentData] = React.useState<any[]>([]);
     const [cumulatedSubjectivityData, setCumulatedSubjectivityData] = React.useState<any[]>([]);
-    const [averageSentiment, setAverageSentiment] = React.useState({});
-    const [averageSubjectivity, setAverageSubjectivity]= React.useState({});
+    const [averageSentiment, setAverageSentiment] = React.useState({label:"", qty:0});
+    const [averageSubjectivity, setAverageSubjectivity]= React.useState({label:"", qty:0});
+    const [haveData, setHaveData] = React.useState(false);
     
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -42,6 +47,7 @@ export default function NewAnalysisPage(){
         if(analysedData.length> 1){
             setCumulatedSentimentData(calculateAverageData("sentiment")!);
             setCumulatedSubjectivityData(calculateAverageData("subjectivity")!);
+            setHaveData(true);
         }
         else{
             return;
@@ -53,8 +59,8 @@ export default function NewAnalysisPage(){
         if(cumulatedSentimentData.length > 1) {
             console.log("Sentiment ",cumulatedSentimentData);
             console.log([...calculateAverageData("sentiment")!.entries()].reduce((a, e ) => e[1] > a[1] ? e : a));
-            setAverageSentiment([...calculateAverageData("sentiment")!.entries()].reduce((a, e ) => e[1] > a[1] ? e : a));
-            setAverageSubjectivity([...calculateAverageData("subjectivity")!.entries()].reduce((a, e ) => e[1] > a[1] ? e : a));
+            setAverageSentiment(cumulatedSentimentData.reduce((a, e ) => e[1] > a[1] ? e : a));
+            setAverageSubjectivity(cumulatedSubjectivityData.reduce((a, e ) => e[1] > a[1] ? e : a));
         }
         else{
             return;
@@ -65,11 +71,11 @@ export default function NewAnalysisPage(){
         switch(dataToCalculate){
             case "sentiment":
                 let sentimentMap = analysedData.reduce((acc, e) => acc.set(e.sentiment_label, (acc.get(e.sentiment_label) || 0) + 1), new Map());
-                const sentimentArr = [...sentimentMap].map(([label, value]) => ({ label, value }));
+                const sentimentArr = [...sentimentMap].map(([label, qty]) => ({ label, qty }));
                 return sentimentArr;
             case "subjectivity":
                 let subjectivityMap = analysedData?.reduce((acc, e) => acc.set(e.subjectivity_label, (acc.get(e.subjectivity_label) || 0) + 1), new Map());
-                const subjectivityArr = [...subjectivityMap].map(([label, value]) => ({ label, value }));
+                const subjectivityArr = [...subjectivityMap].map(([label, qty]) => ({ label, qty }));
                 return subjectivityArr;
         }
     }
@@ -79,6 +85,24 @@ export default function NewAnalysisPage(){
             .then(response => {
                 setAnalysedData(response.data.data); 
                 handleNext()});
+    }
+
+    const getData = () => {
+        let data: number[] = [];
+            cumulatedSentimentData.map((sentimentData) => {
+                data.push(sentimentData.qty);
+            })
+            console.log(data);
+        return data;
+    }
+
+    const getLabels = () => {
+        let labels: string[] = [];
+        cumulatedSentimentData.map((sentimentData) => {
+            labels.push(sentimentData.label);
+        })
+        console.log(labels);
+        return labels;
     }
 
     const steps=[
@@ -114,6 +138,13 @@ export default function NewAnalysisPage(){
                 <>
                     <Typography variant="h4" sx={{marginBottom:2}}>Your Results</Typography>
                     <AnalysedDataInfoCard averageSentiment={averageSentiment} averageSubjectivity={averageSubjectivity} />
+                    <Box sx={{width:"50%"}}>
+                        {haveData?
+                            <Charts chartType="Bar" data={getData()} labels={getLabels()}/>
+                        :
+                        <></>}
+                    </Box>
+                    
                 </>
             )
         }

@@ -1,0 +1,1 @@
+export const SubjectivityLabels = ["Very Subjective", "Mostly Subjective", "Mostly Objective", "Very Objective"];
