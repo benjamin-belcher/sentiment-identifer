@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Sentiment Identifer",
+  "name": "Sentiment Identifer to discover the sentiment in your data",
   "icons": [
     {
       "src": "favicon.ico",
