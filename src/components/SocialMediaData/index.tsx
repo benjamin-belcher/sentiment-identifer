@@ -49,7 +49,7 @@ export default function SocialMediaData(props: any){
     // Validation for the number inputs to only allow numbers between 0 & 100
     const handleNumberInput = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setState:  React.Dispatch<React.SetStateAction<number>>) => {
         const val = parseInt(e.target.value);
-        if(e.target.value.toString() === "" || !isNaN(val) && val <= 100){
+        if(e.target.value.toString() === "" || !isNaN(val) && val <= 100000){
             setState(val);
         }
     }
