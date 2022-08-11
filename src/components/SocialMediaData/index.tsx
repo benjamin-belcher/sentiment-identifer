@@ -136,8 +136,8 @@ export default function SocialMediaData(props: any){
                 {keywords.length >=1 ? 
                     <TextField 
                         disabled={loading}
-                        sx={{marginTop:3}}
-                        InputProps={{ inputProps:{type:'number', min:0, max:100} }} 
+                        sx={{marginTop:3, minWidth:"fit-content"}}
+                        InputProps={{ inputProps:{type:'number', min:0} }} 
                         label="Number of Posts"
                         variant='outlined' 
                         value={numberOfPosts} 
