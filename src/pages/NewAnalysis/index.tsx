@@ -21,7 +21,7 @@ import SocialMediaData from "../../components/SocialMediaData";
 import DataTable from "../../components/DataTable";
 import { IDataTableProps } from "../../interfaces/props/IDataTableProps";
 import axios from "axios";
-import {localBackendAPI} from '../../util/constants/BaseAPIEndpoints';
+import {APIEndpoint} from '../../util/constants/BaseAPIEndpoints';
 import { IAnalysedData, emptyIAnalysedData } from "../../interfaces/IAnalysedData";
 import AnalysedDataInfoCard from "../../components/AnalysedDataInfoCard";
 import { Map } from "typescript";
@@ -88,7 +88,7 @@ export default function NewAnalysisPage(){
     }
 
     const startAnalysis = () => {
-        axios.post(localBackendAPI+"analyse", {"data":dataToDisplay?.rows})
+        axios.post(APIEndpoint+"analyse", {"data":dataToDisplay?.rows})
             .then(response => {
                 setAnalysedData(response.data.data); 
                 handleNext()});

@@ -18,7 +18,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import axios from 'axios';
 import React from 'react';
 import twitterIcon from '../../assets/twitterIcon.svg';
-import {localBackendAPI} from '../../util/constants/BaseAPIEndpoints';
+import {APIEndpoint} from '../../util/constants/BaseAPIEndpoints';
 import { Navigate } from 'react-router-dom';
 
 export default function SocialMediaData(props: any){
@@ -58,7 +58,7 @@ export default function SocialMediaData(props: any){
         setLoading(true);
         switch(platform){
             case "Twitter":
-                axios.post(localBackendAPI+"tweet/search", {
+                axios.post(APIEndpoint+"tweet/search", {
                     "keyword":keywords[0],
                     "numberOfTweets": numberOfPosts
                 })

@@ -1,1 +1,1 @@
-export const localBackendAPI = "http://localhost:8000/api/";
+export const APIEndpoint = process.env.NODE_ENV === 'production' ? "https://sentiment-identifier-backend.herokuapp.com/api/": "http://localhost:8000/api/";
