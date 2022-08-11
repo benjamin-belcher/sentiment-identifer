@@ -71,7 +71,7 @@ export default function NavigationSideBar(props: any){
                     />
 
                     <List sx={{width:'100%', margin:0}}>
-                        <ListItem sx={{padding:0}}>
+                        <ListItem sx={{padding:0}} disabled>
                             <ListItemButton sx={{padding:0}}>  
                                 <ListItemIcon sx={{marginRight:'1em', minWidth:0}}>
                                     <PersonIcon />
@@ -94,13 +94,13 @@ export default function NavigationSideBar(props: any){
                                 <ListItemButton sx={{ pl: 4 }} onClick={() => {handleNavigate("/analysis/new")}}>
                                         <ListItemText primary="New Analysis" sx={{marginLeft:'1em'}}/>
                                 </ListItemButton>
-                                <ListItemButton sx={{ pl: 4 }}>
+                                <ListItemButton sx={{ pl: 4 }} disabled>
                                         <ListItemText primary="Analysis History" sx={{marginLeft:'1em'}}/>
                                 </ListItemButton>
                                 </List>
                             </Collapse>
 
-                        <ListItem sx={{padding:0}}>
+                        <ListItem sx={{padding:0}} disabled>
                             <ListItemButton sx={{padding:0}}>  
                                 <ListItemIcon sx={{marginRight:'1em', minWidth:0}}>
                                     <SanitizerIcon />
@@ -127,48 +127,7 @@ export default function NavigationSideBar(props: any){
                             </ListItemButton>
                         </ListItem>
 
-                        {/* <ListItem sx={{padding:0}}>
-                            <ListItemButton sx={{padding:0}} onClick={handleAdminClick}>  
-                                <ListItemIcon sx={{marginRight:'1em', minWidth:0}}>
-                                    <TuneIcon />
-                                </ListItemIcon>
-                                <ListItemText primaryTypographyProps={{fontSize: '1.1rem'}}  primary="Admin Tools" />
-                                {adminListOpen ? <ExpandLess /> : <ExpandMore />}
-                            </ListItemButton>
-                            </ListItem>
-                            <Collapse in={adminListOpen} timeout="auto" unmountOnExit>
-                                <List component="div" disablePadding>
-                                <ListItemButton sx={{ pl: 4 }} onClick={() => {handleNavigate("/admin")}}>
-                                        <ListItemText primary="Dashboard" sx={{marginLeft:'1em'}}/>
-                                </ListItemButton>
-                                <ListItemButton sx={{ pl: 4 }}>
-                                        <ListItemText primary="Pending Bookings" sx={{marginLeft:'1em'}}/>
-                                </ListItemButton>
-                                <ListItemButton sx={{ pl: 4 }}>
-                                        <ListItemText primary="Cancellations" sx={{marginLeft:'1em'}}/>
-                                </ListItemButton>
-                                <ListItemButton sx={{ pl: 4 }}>
-                                        <ListItemText primary="Session Schedule" sx={{marginLeft:'1em'}}/>
-                                </ListItemButton>
-                                <ListItemButton sx={{ pl: 4 }}>
-                                        <ListItemText primary="Past Sessions" sx={{marginLeft:'1em'}}/>
-                                </ListItemButton>
-                                <ListItemButton sx={{ pl: 4 }}>
-                                        <ListItemText primary="Courses" sx={{marginLeft:'1em'}}/>
-                                </ListItemButton>
-                                <ListItemButton sx={{ pl: 4 }}>
-                                        <ListItemText primary="Learning Pathways" sx={{marginLeft:'1em'}}/>
-                                </ListItemButton>
-                                <ListItemButton sx={{ pl: 4 }}>
-                                        <ListItemText primary="Training Matrix" sx={{marginLeft:'1em'}}/>
-                                </ListItemButton>
-                                <ListItemButton sx={{ pl: 4 }}>
-                                        <ListItemText primary="User Management" sx={{marginLeft:'1em'}}/>
-                                </ListItemButton>
-                                </List>
-                            </Collapse> */}
-
-                            <ListItem sx={{padding:0}}>
+                            <ListItem sx={{padding:0}} disabled>
                             <ListItemButton sx={{padding:0}}>  
                                 <ListItemIcon sx={{marginRight:'1em', minWidth:0}}>
                                     <SettingsIcon />

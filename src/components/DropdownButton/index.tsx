@@ -44,55 +44,55 @@ export default function DropdownButton(props: IDropdownButtonProps){
     
     return(
     <>
-    <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-    <Button onClick={handleClick}>{props.options[selectedIndex]}</Button>
-    <Button
-      size="small"
-      aria-controls={open ? 'split-button-menu' : undefined}
-      aria-expanded={open ? 'true' : undefined}
-      aria-label="select merge strategy"
-      aria-haspopup="menu"
-      onClick={handleToggle}
-    >
-      <ArrowDropDownIcon />
-    </Button>
-  </ButtonGroup>
-  <Popper
-    sx={{
-      zIndex: 1,
-    }}
-    open={open}
-    anchorEl={anchorRef.current}
-    role={undefined}
-    transition
-    disablePortal
-  >
-    {({ TransitionProps, placement }) => (
-      <Grow
-        {...TransitionProps}
-        style={{
-          transformOrigin:
-            placement === 'bottom' ? 'center top' : 'center bottom',
-        }}
+    <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button" disabled>
+      <Button onClick={handleClick}>{props.options[selectedIndex]}</Button>
+      <Button
+        size="small"
+        aria-controls={open ? 'split-button-menu' : undefined}
+        aria-expanded={open ? 'true' : undefined}
+        aria-label="select merge strategy"
+        aria-haspopup="menu"
+        onClick={handleToggle}
       >
-        <Paper>
-          <ClickAwayListener onClickAway={handleClose}>
-            <MenuList id="split-button-menu" autoFocusItem>
-              {props.options.map((option, index) => (
-                <MenuItem
-                  key={option}
-                  selected={index === selectedIndex}
-                  onClick={(event) => handleMenuItemClick(event, index)}
-                >
-                  {option}
-                </MenuItem>
-              ))}
-            </MenuList>
-          </ClickAwayListener>
-        </Paper>
-      </Grow>
-    )}
-  </Popper>
+        <ArrowDropDownIcon />
+      </Button>
+    </ButtonGroup>
+    <Popper
+      sx={{
+        zIndex: 1,
+      }}
+      open={open}
+      anchorEl={anchorRef.current}
+      role={undefined}
+      transition
+      disablePortal
+    >
+      {({ TransitionProps, placement }) => (
+        <Grow
+          {...TransitionProps}
+          style={{
+            transformOrigin:
+              placement === 'bottom' ? 'center top' : 'center bottom',
+          }}
+        >
+          <Paper>
+            <ClickAwayListener onClickAway={handleClose}>
+              <MenuList id="split-button-menu" autoFocusItem>
+                {props.options.map((option, index) => (
+                  <MenuItem
+                    key={option}
+                    selected={index === selectedIndex}
+                    onClick={(event) => handleMenuItemClick(event, index)}
+                  >
+                    {option}
+                  </MenuItem>
+                ))}
+              </MenuList>
+            </ClickAwayListener>
+          </Paper>
+        </Grow>
+      )}
+    </Popper>
   </>
 )
 }
