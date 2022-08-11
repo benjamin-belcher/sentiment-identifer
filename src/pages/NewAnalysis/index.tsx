@@ -145,7 +145,8 @@ export default function NewAnalysisPage(){
                 <> 
                     <Typography variant="h4">Add your data</Typography>
                     <Stack direction="row" spacing={2} sx={{marginTop:2, marginBottom:6}}>
-                        <UserStorage/>
+                        {/* TODO: Waiting to fully impliment this */}
+                        {/* <UserStorage/> */}
                         <SocialMediaData reviewData={handleNext} setDataToDisplay={setDataToDisplay}/>
                     </Stack>
                 </>
