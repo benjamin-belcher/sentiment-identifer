@@ -11,6 +11,8 @@ import {
     MenuItem,
     Select,
     SelectChangeEvent,
+    useTheme,
+    IconButton,
 } from '@mui/material';
 import UserStorage from "../../components/UserStorage/idex";
 import SocialMediaData from "../../components/SocialMediaData";
@@ -23,7 +25,9 @@ import AnalysedDataInfoCard from "../../components/AnalysedDataInfoCard";
 import Charts from "../../components/Charts";
 import DropdownButton from "../../components/DropdownButton";
 import { ChartTypes } from "../../util/constants/ChartTypes";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
 
 export default function NewAnalysisPage(){
     const [activeStep, setActiveStep] = React.useState(0);
@@ -35,6 +39,7 @@ export default function NewAnalysisPage(){
     const [averageSubjectivity, setAverageSubjectivity]= React.useState({label:"", qty:0});
     const [haveData, setHaveData] = React.useState(false);
     const [chartType, setChartType] = React.useState("Bar");
+    const navigate = useNavigate();
     
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -136,7 +141,14 @@ export default function NewAnalysisPage(){
         {
             element:(
                 <> 
-                    <Typography variant="h4">Add your data</Typography>
+                    <Stack direction="row">
+                        <Typography variant="h4">Add your data</Typography>
+                        <IconButton color="primary" onClick={() =>{navigate("/help")}}>
+                            <InfoOutlinedIcon/>
+                        </IconButton>
+                        
+                    </Stack>
+                    
                     <Stack direction="row" spacing={2} sx={{marginTop:2, marginBottom:6}}>
                         {/* TODO: Waiting to fully impliment this */}
                         {/* <UserStorage/> */}
@@ -149,7 +161,12 @@ export default function NewAnalysisPage(){
         {
             element: (
                 <>
-                    <Typography variant="h4" sx={{marginBottom:2}}>Review Your Data</Typography>
+                    <Stack direction="row" sx={{display:"flex",alignItems: "flex-start"}}>
+                        <Typography variant="h4" sx={{marginBottom:2}}>Review Your Data</Typography>
+                        <IconButton color="primary" onClick={() =>{navigate("/help")}}>
+                            <InfoOutlinedIcon/>
+                        </IconButton>
+                    </Stack>
                     <DataTable columns={dataToDisplay?.columns} rows={dataToDisplay?.rows} />
                     <Stack direction="row" justifyContent="space-between">
                         <Button variant="contained" sx={{marginTop:1, marginBottom:4}} onClick={() =>{handleBack(); setDataToDisplay(undefined)}}>Back</Button>
@@ -165,7 +182,13 @@ export default function NewAnalysisPage(){
             element:(
                 <>
                 <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="h4" sx={{marginBottom:2}}>Your Results</Typography>
+                    <Stack direction="row" sx={{display:"flex",alignItems: "flex-start"}}>
+                        <Typography variant="h4" sx={{marginBottom:2}}>Your Results</Typography>
+                        <IconButton color="primary" onClick={() =>{navigate("/help")}}>
+                            <InfoOutlinedIcon/>
+                        </IconButton>
+                    </Stack>
+                    
                     <Box sx={{display: 'flex', height:"fit-content"}}>
                         <DropdownButton options={["Save Analysed Data", "Save Charts", "Save All"]} />
                         <Button variant="contained" sx={{marginLeft:"1rem"}} onClick={() => {handleStartNewAnalysis()}}>Start Again</Button>
