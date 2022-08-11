@@ -2,11 +2,7 @@ import React, {useState, useEffect} from "react";
 import {
     Box, 
     Divider, 
-    Paper, 
     Typography,
-    Stepper,
-    Step,
-    StepLabel,
     Button,
     Stack,
     MobileStepper,
@@ -24,13 +20,10 @@ import axios from "axios";
 import {APIEndpoint} from '../../util/constants/BaseAPIEndpoints';
 import { IAnalysedData, emptyIAnalysedData } from "../../interfaces/IAnalysedData";
 import AnalysedDataInfoCard from "../../components/AnalysedDataInfoCard";
-import { Map } from "typescript";
 import Charts from "../../components/Charts";
-import { SentimentLabels } from "../../util/constants/SentimentLabels";
-import { DataArray } from "@mui/icons-material";
-import { IChartData } from "../../interfaces/IChartData";
 import DropdownButton from "../../components/DropdownButton";
 import { ChartTypes } from "../../util/constants/ChartTypes";
+import "./styles.css";
 
 export default function NewAnalysisPage(){
     const [activeStep, setActiveStep] = React.useState(0);
