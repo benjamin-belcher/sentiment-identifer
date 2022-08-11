@@ -10,6 +10,11 @@ import {
     Button,
     Stack,
     MobileStepper,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
 } from '@mui/material';
 import UserStorage from "../../components/UserStorage/idex";
 import SocialMediaData from "../../components/SocialMediaData";
@@ -24,6 +29,8 @@ import Charts from "../../components/Charts";
 import { SentimentLabels } from "../../util/constants/SentimentLabels";
 import { DataArray } from "@mui/icons-material";
 import { IChartData } from "../../interfaces/IChartData";
+import DropdownButton from "../../components/DropdownButton";
+import { ChartTypes } from "../../util/constants/ChartTypes";
 
 export default function NewAnalysisPage(){
     const [activeStep, setActiveStep] = React.useState(0);
@@ -34,6 +41,7 @@ export default function NewAnalysisPage(){
     const [averageSentiment, setAverageSentiment] = React.useState({label:"", qty:0});
     const [averageSubjectivity, setAverageSubjectivity]= React.useState({label:"", qty:0});
     const [haveData, setHaveData] = React.useState(false);
+    const [chartType, setChartType] = React.useState("Bar");
     
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -57,8 +65,7 @@ export default function NewAnalysisPage(){
 
     useEffect(() => {
         if(cumulatedSentimentData.length > 1) {
-            console.log("Sentiment ",cumulatedSentimentData);
-            console.log([...calculateAverageData("sentiment")!.entries()].reduce((a, e ) => e[1] > a[1] ? e : a));
+            // console.log([...calculateAverageData("sentiment")!.entries()].reduce((a, e ) => e[1] > a[1] ? e : a));
             setAverageSentiment(cumulatedSentimentData.reduce((a, e ) => e[1] > a[1] ? e : a));
             setAverageSubjectivity(cumulatedSubjectivityData.reduce((a, e ) => e[1] > a[1] ? e : a));
         }
@@ -87,22 +94,49 @@ export default function NewAnalysisPage(){
                 handleNext()});
     }
 
-    const getData = () => {
+    const getSentimentData = () => {
         let data: number[] = [];
             cumulatedSentimentData.map((sentimentData) => {
                 data.push(sentimentData.qty);
             })
-            console.log(data);
         return data;
     }
 
-    const getLabels = () => {
+    const getSubjectivityData = () => {
+        let data: number[] = [];
+            cumulatedSubjectivityData.map((subjectData) => {
+                data.push(subjectData.qty);
+            })
+        return data;
+    }
+
+    const getSentimentLabels = () => {
         let labels: string[] = [];
         cumulatedSentimentData.map((sentimentData) => {
             labels.push(sentimentData.label);
         })
-        console.log(labels);
         return labels;
+    }
+
+    const getSubjectivityLabels = () => {
+        let labels: string[] = [];
+        cumulatedSubjectivityData.map((subjectData) => {
+            labels.push(subjectData.label);
+        })
+        return labels;
+    }
+
+    const handleStartNewAnalysis = () => {
+        setActiveStep(0);
+        setAnalysedData(emptyIAnalysedData);
+        setCumulatedSubjectivityData([]);
+        setCumulatedSentimentData([]);
+        setDataToDisplay(undefined);
+        setHaveData(false);
+    }
+
+    const handleChartTypeChange = (e: SelectChangeEvent) => {
+        setChartType(e.target.value as string);
     }
 
     const steps=[
@@ -136,11 +170,39 @@ export default function NewAnalysisPage(){
         {
             element:(
                 <>
+                <Stack direction="row" justifyContent="space-between">
                     <Typography variant="h4" sx={{marginBottom:2}}>Your Results</Typography>
-                    <AnalysedDataInfoCard averageSentiment={averageSentiment} averageSubjectivity={averageSubjectivity} />
+                    <Box sx={{display: 'flex', height:"fit-content"}}>
+                        <DropdownButton options={["Save Analysed Data", "Save Charts", "Save All"]} />
+                        <Button variant="contained" sx={{marginLeft:"1rem"}} onClick={() => {handleStartNewAnalysis()}}>Start Again</Button>
+                    </Box>
+                    
+                </Stack>
+                <Box sx={{width:"150px"}}>
+                    <FormControl fullWidth>
+                        <InputLabel id="chart-type-label">Chart Type</InputLabel>
+                        <Select
+                            labelId="chart-type-label"
+                            id="chart-type-select"
+                            value={chartType}
+                            label="Chart Type"
+                            onChange={handleChartTypeChange}
+                        >
+                            {ChartTypes.map(chartType =>(
+                                <MenuItem value={chartType}>{chartType}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
+
+                    {/* There is a bug with calculating the cumulated data */}
+                    {/* <AnalysedDataInfoCard averageSentiment={averageSentiment} averageSubjectivity={averageSubjectivity} /> */}
                     <Box sx={{width:"50%"}}>
                         {haveData?
-                            <Charts chartType="Bar" data={getData()} labels={getLabels()}/>
+                            <Stack direction="row">
+                                <Charts chartType={chartType} chartHeader="Sentiment Results" chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={getSentimentData()} labels={getSentimentLabels()}/>
+                                <Charts chartType={chartType} chartHeader="Subjectivity Results" chartBackgroundColor="rgba(227, 0, 114, 0.8)" data={getSubjectivityData()} labels={getSubjectivityLabels()} />
+                            </Stack>
                         :
                         <></>}
                     </Box>

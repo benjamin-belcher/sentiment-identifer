@@ -20,9 +20,15 @@ export default function Charts(props: IChartsProps) {
         <Chart
             type={ReturnChartType(props.chartType)}
             datasetIdKey='id'
+            height="200px"
+            options={{maintainAspectRatio: false}}
             data={{
             labels: props.labels,
-            datasets: [{label: '', data:props.data}],
+            datasets: [{
+                label: props.chartHeader, 
+                data:props.data,
+                backgroundColor: props.chartBackgroundColor
+            }],
             }}
         />
     )
