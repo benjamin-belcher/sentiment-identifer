@@ -10,6 +10,9 @@ import {
     ListItem,
 } from '@mui/material';
 import {useState} from 'react';
+import axios from 'axios';
+import {APIEndpoint} from '../../util/constants/BaseAPIEndpoints';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUpPage(props: any){
     // Values
@@ -24,6 +27,8 @@ export default function SignUpPage(props: any){
     const [passwordError, setPasswordError] = useState(false);
     const [password2Error, setPassword2Error] = useState(false);
 
+    const navigate = useNavigate();
+
     const isValidEmail = (email: string) => {  
         return  /\S+@\S+\.\S+/.test(email);
     }
@@ -37,7 +42,18 @@ export default function SignUpPage(props: any){
     }
 
     const handleSignUp = () => {
-
+        if(emailError || passwordError || password2Error || firstname === "" || lastname === ""|| email === "" ||password === "" || confirmPassword === "") return;
+        axios.post(APIEndpoint+"user/register", {
+            "first_name": firstname,
+            "last_name": lastname,
+            "email": email,
+            "password": password,
+            "password2": confirmPassword
+        }).then(response => {
+            if(response.status === 201){
+                navigate("/signin");
+            };
+        })
     }
 
     const passwordHelperText = () => {
@@ -129,6 +145,7 @@ export default function SignUpPage(props: any){
                             (e) => {
                                 setPassword(e.target.value);
                                 setPasswordError(!isValidPassword(e.target.value));
+                                setPassword2Error(!doPasswordsMatch(confirmPassword, e.target.value))
                             }
                         }/>
                     <TextField 
