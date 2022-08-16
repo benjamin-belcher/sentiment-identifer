@@ -14,6 +14,7 @@ import {Stack} from '@mui/material';
 import NavigationSideBar from './components/Sidebar';
 import NewAnalysisPage from './pages/NewAnalysis';
 import HelpPage from './pages/HelpPage';
+import LogoutPage from './pages/LogoutPage';
 
 function App() {
   const [currentUser, setCurrentUser] = useState<IUserModel>({
@@ -52,11 +53,13 @@ function App() {
       <header className="App-header">
         
           <UserContext.Provider value={{currentUser, setUser}}>
+          <Routes>
+            <Route path="/logout" element={<LogoutPage/>}/>
+            <Route path="/signin" element={<SignInPage/>}/>
+              <Route path="/signup" element={<SignUpPage/>}/>
+          </Routes>
             {noUserLoggedIn() ? 
-              <Routes>
-                <Route path="/signin" element={<SignInPage/>}/>
-                <Route path="/signup" element={<SignUpPage/>}/>
-              </Routes>:
+              <></>:
             <Stack direction="row" sx={{height:'100vh'}}>
               <NavigationSideBar/>
               <Routes>

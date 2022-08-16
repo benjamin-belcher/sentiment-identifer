@@ -38,8 +38,9 @@ export default function NavigationSideBar(props: any){
 
     return(
         <Stack direction="row" minWidth="340px" sx={{backgroundColor:'#F4F5F6'}}>
-            <Box sx={{height:'100%' ,width:'80px', backgroundColor:'#1B838B'}} className="side-nav">
+            <Box sx={{height:'100%' ,width:'80px', backgroundColor:'#1B838B', display: 'flex', flexDirection:'column', justifyContent: 'space-between'}} className="side-nav">
                 <IconButton onClick={() => {navigate("/record/"+context.currentUser.id)}}><Avatar src={context.currentUser.profileImg}  sx={{margin:'8px 8px 24px 8px'}}/></IconButton>
+                <IconButton onClick={() => {navigate("/logout")}}><LogoutIcon sx={{margin:'8px 8px 24px 8px', color:"white"}}/></IconButton>
             </Box>
             <Box sx={{width:'100%', paddingLeft:2,  paddingRight:2,  paddingTop:2}}>
                 <div style={{
