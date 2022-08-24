@@ -15,6 +15,7 @@ import NavigationSideBar from './components/Sidebar';
 import NewAnalysisPage from './pages/NewAnalysis';
 import HelpPage from './pages/HelpPage';
 import LogoutPage from './pages/LogoutPage';
+import MiniDrawer from './components/MuiSidebar';
 
 function App() {
   const [currentUser, setCurrentUser] = useState<IUserModel>({
@@ -61,7 +62,8 @@ function App() {
             {noUserLoggedIn() ? 
               <></>:
             <Stack direction="row" sx={{height:'100vh'}}>
-              <NavigationSideBar/>
+              {/* <NavigationSideBar/> */}
+              <MiniDrawer />
               <Routes>
                 <Route path="/" element={<Homepage/>}/>
                 <Route path="/analysis/new" element={<NewAnalysisPage/>}/>
