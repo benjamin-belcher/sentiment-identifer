@@ -1,0 +1,26 @@
+$sidebar-bg-color: #264653 !important;
+$highlight-color: #2A9D8F !important;
+$submenu-bg-color: #264653 !important;
+$submenu-bg-color-collapsed: #264653 !important;
+$icon-bg-color: #264653 !important;
+.pro-icon{
+    animation:none !important;
+} 
+
+.pro-sidebar{
+    color:#ffffff !important;
+}
+
+.pro-sidebar-footer{
+    display:flex;
+    justify-content: flex-end;
+}
+
+.pro-inner-list-item{
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-left: 8px !important;
+}
+
+@import '~react-pro-sidebar/dist/scss/styles.scss';

@@ -1,174 +1,73 @@
-import * as React from 'react';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import SanitizerIcon from '@mui/icons-material/Sanitizer';
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import TwitterIcon from '@mui/icons-material/Twitter';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { Popover } from '@mui/material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import AddIcon from '@mui/icons-material/Add';
+import HistoryIcon from '@mui/icons-material/History';
+import StorageRoundedIcon from '@mui/icons-material/StorageRounded';
+import {useContext, useState} from 'react';
+import {Box} from '@mui/material'
+import {Link, useNavigate} from 'react-router-dom';
+import './styles.scss';
 
-import SpeedDial from '@mui/material/SpeedDial';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import SpeedDialAction from '@mui/material/SpeedDialAction';
-import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import PrintIcon from '@mui/icons-material/Print';
-import ShareIcon from '@mui/icons-material/Share';
+import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarFooter, SidebarContent } from 'react-pro-sidebar';
+import 'react-pro-sidebar/dist/css/styles.css';
+import { Avatar, IconButton } from '@mui/material';
+import { UserContext } from '../../util/UserContext';
+import { UserContextType } from '../../util/UserContextType';
 
-const drawerWidth = 240;
+export default function MiniDrawer(){
+  const [collapsed, setCollapsed] = useState(true);
+  const context = useContext(UserContext) as UserContextType;
+  const navigate = useNavigate();
 
-const actions = [
-    { icon: <FileCopyIcon />, name: 'Copy' },
-    { icon: <SaveIcon />, name: 'Save' },
-    { icon: <PrintIcon />, name: 'Print' },
-    { icon: <ShareIcon />, name: 'Share' },
-  ];
-
-const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: 'hidden',
-});
-
-const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
-});
-
-
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
+  return(
+    <ProSidebar collapsed={collapsed}>
+      <SidebarHeader>
+        <Menu iconShape='round'>
+            <MenuItem icon={<Avatar>H</Avatar>} />
+        </Menu>
+      </SidebarHeader>
+      <SidebarContent>
+        <Menu iconShape="round">
+          <MenuItem icon={<DashboardIcon color="secondary" />}>
+            Dashboard
+            <Link to="/"/>
+          </MenuItem>
+          <SubMenu title="Analyse Data" icon={<AutoFixHighIcon color="secondary" />}>
+            <MenuItem icon={<AddIcon color="secondary" />}>
+              New Analysis
+              <Link to="/analysis/new" />
+            </MenuItem>
+            <MenuItem icon={<HistoryIcon color="secondary" />}>Analysis Hiostory</MenuItem>
+          </SubMenu>
+          <div id="pointer"></div>
+          <SubMenu title="Clean Data" icon={<SanitizerIcon color="secondary"/>}>
+            <MenuItem icon={<StorageRoundedIcon color="secondary" />}>Clean Data</MenuItem>
+          </SubMenu>
+          <SubMenu title="Source Data" icon={<TravelExploreIcon color="secondary"/>}>
+            <MenuItem icon={<TwitterIcon color="secondary"/>}>Source Twitter Data</MenuItem>
+          </SubMenu>
+        </Menu>
+      </SidebarContent>
+    <SidebarFooter>
+        <Box sx={{padding:"8px 20px 8px 20px", display:"flex", alignItems:"center", justifyContent: "flex-end", width:"fit-content"}}>
+          {
+            collapsed? 
+              <IconButton onClick={() => {setCollapsed(false)}}>
+                <ChevronRightIcon color="secondary" /> 
+              </IconButton>  
+            : 
+              <IconButton onClick={() => {setCollapsed(true)}}>
+                <ChevronLeftIcon color="secondary"/>
+              </IconButton>
+          }
+        </Box>
+    </SidebarFooter>
+  </ProSidebar>
+  )
 }
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-    boxSizing: 'border-box',
-    ...(open && {
-      ...openedMixin(theme),
-      '& .MuiDrawer-paper': openedMixin(theme),
-    }),
-    ...(!open && {
-      ...closedMixin(theme),
-      '& .MuiDrawer-paper': closedMixin(theme),
-    }),
-  }),
-);
-
-export default function MiniDrawer() {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [open, setOpen] = React.useState(false);
-
-    const handleOpenPopover = (event: any) => {
-        setOpen(false);
-        console.log(event.target);
-        setAnchorEl(event.target);
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-        setOpen(false);
-    };
-
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <Drawer variant="permanent" open={false}>
-        {/* <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader> */}
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }} >
-              <ListItemButton
-                onMouseEnter={handleOpenPopover} 
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-              
-            <Popover 
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                >
-                The content of the Popover.
-            </Popover>
-
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <SpeedDial
-                    ariaLabel="SpeedDial basic example"
-                    icon={<SpeedDialIcon />}
-                    direction="right"
-                >
-                    {actions.map((action) => (
-                    <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                    />
-                    ))}
-                </SpeedDial>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </Box>
-  );
-}
