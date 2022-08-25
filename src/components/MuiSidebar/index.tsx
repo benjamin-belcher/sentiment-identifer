@@ -44,7 +44,6 @@ export default function MiniDrawer(){
             </MenuItem>
             <MenuItem icon={<HistoryIcon color="secondary" />}>Analysis Hiostory</MenuItem>
           </SubMenu>
-          <div id="pointer"></div>
           <SubMenu title="Clean Data" icon={<SanitizerIcon color="secondary"/>}>
             <MenuItem icon={<StorageRoundedIcon color="secondary" />}>Clean Data</MenuItem>
           </SubMenu>
