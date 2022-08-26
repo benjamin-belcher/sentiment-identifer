@@ -28,7 +28,7 @@ export default function MiniDrawer(){
     <ProSidebar collapsed={collapsed}>
       <SidebarHeader>
         <Menu iconShape='round'>
-            <MenuItem icon={<Avatar>H</Avatar>} />
+            <MenuItem icon={<Avatar src={context.currentUser.profileImg}></Avatar>}>{context.currentUser.firstname} {context.currentUser.lastname} <Link to={context.currentUser.id}/></MenuItem>
         </Menu>
       </SidebarHeader>
       <SidebarContent>
