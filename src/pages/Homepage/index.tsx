@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useCallback, useContext, useRef} from 'react';
 import { UserContext } from '../../util/UserContext';
 import { UserContextType } from '../../util/UserContextType';
 import {useNavigate} from 'react-router-dom';
@@ -12,6 +12,16 @@ export default function Homepage(props: any){
     
     const context = useContext(UserContext) as UserContextType;
     const navigate = useNavigate();
+    const firstChartRef = useRef<any>(null);
+    const secondChartRef = useRef<any>(null);
+
+    const downloadChart = useCallback((chartRef: any, filename: string) => {
+        const link = document.createElement("a");
+        link.download = filename;
+        link.href = chartRef?.current?.toBase64Image();
+        
+        link.click();
+    }, [])
 
     const getTime = () => {
         let current_time = moment().format("HH")
@@ -39,22 +49,22 @@ export default function Homepage(props: any){
                 <Stack direction="row" spacing={2}>
                     <Box sx={{width:"50%"}}>
                         <ButtonGroup size="small">
-                            <Button>Export Chart</Button>
+                            <Button onClick={() =>{downloadChart(firstChartRef, "FirstChart")}}>Export Chart</Button>
                             <Button>Export Dataset</Button>
                             <Button>Edit Dataset</Button>
                         </ButtonGroup>
                         <Stack direction="row" spacing={2}>
-                            <Charts chartType="Bar" chartHeader="Sentiment Results" chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={[10,2,3,5,8]} labels={["Test","Test","Test","Test","Test"]}/>
+                            <Charts cref={firstChartRef} chartType="Bar" chartHeader="Sentiment Results" chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={[10,2,3,5,8]} labels={["Test","Test","Test","Test","Test"]}/>
                         </Stack>
                     </Box>
                     <Box sx={{width:"50%"}}>
                         <ButtonGroup size="small">
-                            <Button>Export Chart</Button>
+                            <Button onClick={() =>{downloadChart(secondChartRef, "SecondChart")}}>Export Chart</Button>
                             <Button>Export Dataset</Button>
                             <Button>Edit Dataset</Button>
                         </ButtonGroup>
                         <Stack direction="row" spacing={2}>
-                            <Charts chartType="Line" chartHeader="Sentiment Results" chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={[10,2,3,5,8]} labels={["Test","Test","Test","Test","Test"]}/>
+                            <Charts cref={secondChartRef} chartType="Line" chartHeader="Sentiment Results" chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={[10,2,3,5,8]} labels={["Test","Test","Test","Test","Test"]}/>
                         </Stack>
                     </Box>   
                 </Stack>                 

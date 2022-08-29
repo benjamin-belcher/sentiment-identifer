@@ -4,4 +4,5 @@ export interface IChartsProps{
     data: any
     chartHeader: string;
     chartBackgroundColor: string;
+    cref?:any;
 }

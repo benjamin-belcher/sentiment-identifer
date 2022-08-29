@@ -12,6 +12,7 @@ import {
     Bubble
 } from 'react-chartjs-2'
 import { ReturnChartType } from '../../util/ReturnChartType';
+import { useRef } from 'react';
 ChartJS.register(...registerables);
 
 export default function Charts(props: IChartsProps) {
@@ -19,6 +20,7 @@ export default function Charts(props: IChartsProps) {
     return(
         <Chart
             type={ReturnChartType(props.chartType)}
+            ref={props.cref}
             datasetIdKey='id'
             height="400px"
             options={{maintainAspectRatio: false}}
