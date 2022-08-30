@@ -99,7 +99,7 @@ export default function SignUpPage(props: any){
                         minWidth:"250px",
                     }}>
                 <Typography 
-                    color="secondary" 
+                    color="primary" 
                     variant="h2"
                 >Sign Up</Typography>
 

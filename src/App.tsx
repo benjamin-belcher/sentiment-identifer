@@ -16,6 +16,8 @@ import NewAnalysisPage from './pages/NewAnalysis';
 import HelpPage from './pages/HelpPage';
 import LogoutPage from './pages/LogoutPage';
 import MiniDrawer from './components/MuiSidebar';
+import ProfilePage from './pages/ProfilePage';
+import CreatePassword from './components/CreatePassword';
 
 function App() {
   const [currentUser, setCurrentUser] = useState<IUserModel>({
@@ -57,7 +59,8 @@ function App() {
           <Routes>
             <Route path="/logout" element={<LogoutPage/>}/>
             <Route path="/signin" element={<SignInPage/>}/>
-              <Route path="/signup" element={<SignUpPage/>}/>
+            <Route path="/signup" element={<SignUpPage/>}/>
+            <Route path="/createPassword" element={<CreatePassword/>}/>
           </Routes>
             {noUserLoggedIn() ? 
               <></>:
@@ -66,6 +69,7 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Homepage/>}/>
                   <Route path="/analysis/new" element={<NewAnalysisPage/>}/>
+                  <Route path="/:id" element={<ProfilePage/>}/>
                   <Route path="/help" element={<HelpPage/>}/>
                 </Routes>
             </Stack>

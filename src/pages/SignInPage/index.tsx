@@ -47,7 +47,7 @@ export default function SignInPage(props: any){
             }).then(response => {
                 if(response.status === 200){
                     let newUser: IUserModel = {
-                        id:response.data.id,
+                        id:response.data.id.toString(),
                         firstname:response.data.first_name,
                         lastname:response.data.last_name,
                         email: response.data.email,
@@ -87,7 +87,7 @@ export default function SignInPage(props: any){
                         minWidth:"250px",
                         color:"#2F4051",
                     }}>
-                <Typography color="secondary" variant="h2">Login</Typography>
+                <Typography color="primary" variant="h2">Login</Typography>
                 <Divider sx={{marginTop:2, marginBottom:2}}/>
                 <Stack direction="column" spacing={2}>
                     <TextField 

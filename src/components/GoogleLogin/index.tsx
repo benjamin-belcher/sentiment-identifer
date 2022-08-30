@@ -11,10 +11,13 @@ import {
     Box,
     Paper,
     Typography,
-    Stack
+    Stack,
+    Dialog
 } from '@mui/material';
 import GoogleIcon from '../../assets/GoogleIcon.svg';
 import './style.css';
+import axios from "axios";
+import { APIEndpoint } from "../../util/constants/BaseAPIEndpoints";
 
 const clientConfig = { client_id: process.env.REACT_APP_GOOGLE_CLOUD_CLIENT_ID  }
 
@@ -23,12 +26,7 @@ export default function GoogleLoginComponent(props: any){
     const navigate = useNavigate();
 
     const responseGoogle = (googleUser: any): void => {
-        const id_token = googleUser.getAuthResponse(true)
-        const googleId = googleUser.getId()
-
-        console.log("user ", googleUser.getBasicProfile())
-        console.log({ googleId })
-        console.log({accessToken: id_token});
+        // Construct custom user object
         let newUser: IUserModel = {
             id:googleUser.getId(),
             firstname:googleUser.getBasicProfile().getGivenName(),
@@ -36,9 +34,28 @@ export default function GoogleLoginComponent(props: any){
             email: googleUser.getBasicProfile().getEmail(),
             profileImg:googleUser.getBasicProfile().getImageUrl(),
         }
-        localStorage.setItem('currentUser', JSON.stringify(newUser));
-        setUser(newUser);
-        navigate("/");
+
+       
+
+        // Validate if user already exists
+        axios.get(APIEndpoint+"user/find", {
+            params: {
+                "email": newUser.email,
+            }
+        }).then(response => {
+            console.log(response.data.New_User);
+            if(response.data.New_User === 'true'){
+                localStorage.setItem('tempUser', JSON.stringify(newUser));
+                navigate("/createPassword")
+            }
+            else{
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                setUser(newUser);
+                navigate("/");
+            }
+        })
+
+        
     }
 
     const preLoginTracking = (): void => {

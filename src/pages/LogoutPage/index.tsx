@@ -45,7 +45,7 @@ export default function LogoutPage(){
                         flexDirection: "column",
                         alignItems: "center",
                     }}>
-                    <Typography color="secondary" variant="h4">You've been logged out</Typography>
+                    <Typography color="primary" variant="h4">You've been logged out</Typography>
                     <Button variant="contained" onClick={() =>{navigate("/signin")}}>Login again</Button>
             </Paper>
         </Box>
