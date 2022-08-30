@@ -41,7 +41,7 @@ export default function Homepage(props: any){
     }
 
     return(
-        <Box sx={{margin:2, width:'100%', padding:3, height:'100%'}}>
+        <Box sx={{margin:2, width:'80%', padding:3, height:'100%', flexShrink:"1"}}>
             <Typography variant="h3">{getTime()} {context.currentUser.firstname}</Typography>
             <Divider sx={{marginTop:2, marginBottom:2}} />
             <Typography variant="h5">Jump Back In</Typography>

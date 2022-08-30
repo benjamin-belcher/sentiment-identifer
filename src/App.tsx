@@ -10,7 +10,7 @@ import Homepage from './pages/Homepage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import {IUserModel} from './util/IUserModel';
-import {Stack} from '@mui/material';
+import {Box, Stack} from '@mui/material';
 import NavigationSideBar from './components/Sidebar';
 import NewAnalysisPage from './pages/NewAnalysis';
 import HelpPage from './pages/HelpPage';
@@ -50,8 +50,8 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <header className="App-header">
+    <div style={{maxWidth:"100vw", display: "flex", flexDirection:"row", alignItems: "stretch"}}>
+      <header className="App-header" style={{width:"100%",}}>
         
           <UserContext.Provider value={{currentUser, setUser}}>
           <Routes>
@@ -61,14 +61,13 @@ function App() {
           </Routes>
             {noUserLoggedIn() ? 
               <></>:
-            <Stack direction="row" sx={{height:'100vh'}}>
-              {/* <NavigationSideBar/> */}
+            <Stack direction="row" sx={{height:'100vh', width:'100%'}}>
               <MiniDrawer />
-              <Routes>
-                <Route path="/" element={<Homepage/>}/>
-                <Route path="/analysis/new" element={<NewAnalysisPage/>}/>
-                <Route path="/help" element={<HelpPage/>}/>
-              </Routes>
+                <Routes>
+                  <Route path="/" element={<Homepage/>}/>
+                  <Route path="/analysis/new" element={<NewAnalysisPage/>}/>
+                  <Route path="/help" element={<HelpPage/>}/>
+                </Routes>
             </Stack>
             }
           </UserContext.Provider>

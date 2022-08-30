@@ -20,7 +20,7 @@ import { UserContext } from '../../util/UserContext';
 import { UserContextType } from '../../util/UserContextType';
 
 export default function MiniDrawer(){
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const context = useContext(UserContext) as UserContextType;
   const navigate = useNavigate();
 

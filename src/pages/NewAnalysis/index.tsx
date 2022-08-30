@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {
     Box, 
     Divider, 
@@ -28,6 +28,8 @@ import { ChartTypes } from "../../util/constants/ChartTypes";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import "./styles.css";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../util/UserContext";
+import { UserContextType } from "../../util/UserContextType";
 
 export default function NewAnalysisPage(){
     const [activeStep, setActiveStep] = React.useState(0);
@@ -39,6 +41,8 @@ export default function NewAnalysisPage(){
     const [averageSubjectivity, setAverageSubjectivity]= React.useState({label:"", qty:0});
     const [haveData, setHaveData] = React.useState(false);
     const [chartType, setChartType] = React.useState("Bar");
+    const context = useContext(UserContext) as UserContextType;
+    const [keywords, addKeywords] = React.useState<string[]>([]);
     const navigate = useNavigate();
     
     const handleNext = () => {
@@ -86,9 +90,9 @@ export default function NewAnalysisPage(){
     }
 
     const startAnalysis = () => {
-        axios.post(APIEndpoint+"analyse", {"data":dataToDisplay?.rows})
+        axios.post(APIEndpoint+"analyse", {"data":{"tweets":dataToDisplay?.rows, "email": context.currentUser.email, "keyword":keywords[0]}})
             .then(response => {
-                setAnalysedData(response.data.data); 
+                setAnalysedData(response.data); 
                 handleNext()});
     }
 
@@ -152,7 +156,7 @@ export default function NewAnalysisPage(){
                     <Stack direction="row" spacing={2} sx={{marginTop:2, marginBottom:6}}>
                         {/* TODO: Waiting to fully impliment this */}
                         {/* <UserStorage/> */}
-                        <SocialMediaData reviewData={handleNext} setDataToDisplay={setDataToDisplay}/>
+                        <SocialMediaData reviewData={handleNext} setDataToDisplay={setDataToDisplay} keywords={keywords} addKeywords={addKeywords}/>
                     </Stack>
                 </>
                

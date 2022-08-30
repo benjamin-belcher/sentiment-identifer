@@ -21,10 +21,11 @@ import twitterIcon from '../../assets/twitterIcon.svg';
 import {APIEndpoint} from '../../util/constants/BaseAPIEndpoints';
 import { Navigate } from 'react-router-dom';
 
+// TODO add props interface
 export default function SocialMediaData(props: any){
     const [platform, setPlatform] = React.useState('');
     const [displayKeywordSearch, setDisplayKeywordSearch] = React.useState(false);
-    const [keywords, addKeywords] = React.useState<string[]>([]);
+    // const [keywords, addKeywords] = React.useState<string[]>([]);
     const [numberOfPosts, setNumberOfPosts] =React.useState(0);
     const [keywordInput, setKeywordInput] = React.useState("");
     const [loading, setLoading] = React.useState(false);
@@ -36,14 +37,14 @@ export default function SocialMediaData(props: any){
     };
 
     const addKeyword = () => {
-        addKeywords(keywords.concat(keywordInput));
+        props.addKeywords(props.keywords.concat(keywordInput));
         setKeywordInput("");
     }
 
     const removeKeyword = (index: number) => {
-        let keywordsCopy = keywords.slice();
+        let keywordsCopy = props.keywords.slice();
         keywordsCopy.splice(index, 1);
-        addKeywords(keywordsCopy);
+        props.addKeywords(keywordsCopy);
     }
 
     // Validation for the number inputs to only allow numbers between 0 & 100
@@ -59,7 +60,7 @@ export default function SocialMediaData(props: any){
         switch(platform){
             case "Twitter":
                 axios.post(APIEndpoint+"tweet/search", {
-                    "keyword":keywords[0],
+                    "keyword":props.keywords[0],
                     "numberOfTweets": numberOfPosts
                 })
                     .then(response => {
@@ -114,7 +115,7 @@ export default function SocialMediaData(props: any){
             {displayKeywordSearch ? 
             <Box sx={{marginTop:2}}>
                 <Stack spacing={1} direction="row" sx={{marginBottom:1}}>
-                    {keywords.map((keyword, index) => {
+                    {props.keywords.map((keyword: any, index:any) => {
                         return (
                             <Chip disabled={loading} key={index} label={keyword} onClick={() =>{removeKeyword(index)}}/>
                         );
@@ -133,7 +134,7 @@ export default function SocialMediaData(props: any){
                     ></TextField>
                     <Button variant="contained" sx={{height:"3.5rem"}} onClick={() => addKeyword()}>Add</Button>
                 </Stack>
-                {keywords.length >=1 ? 
+                {props.keywords.length >=1 ? 
                     <TextField 
                         disabled={loading}
                         sx={{marginTop:3, minWidth:"fit-content"}}
