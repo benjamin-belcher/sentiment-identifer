@@ -11,6 +11,8 @@ import axios from 'axios';
 import { APIEndpoint } from '../../util/constants/BaseAPIEndpoints';
 import { IAnalysedData, emptyIAnalysedData } from '../../interfaces/IAnalysedData';
 
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+
 export default function Homepage(props: any){
     
     const context = useContext(UserContext) as UserContextType;
@@ -23,7 +25,8 @@ export default function Homepage(props: any){
     const [chart1AverageData, setChart1AverageData] = useState({label:"", qty:0});
     const [chart2AverageData, setChart2AverageData] = useState({label:"", qty:0});
     const [loading, setLoading] = useState(false);
-    const [chartDataIdentifier, setChartDataIdentifier] = useState<string[]>([])
+    const [chartDataIdentifier, setChartDataIdentifier] = useState<string[]>([]);
+    const [userHasCharts, setUserHasCharts] = useState(true)
 
     useEffect(() => {
         setLoading(true);
@@ -32,18 +35,24 @@ export default function Homepage(props: any){
                 "user": context.currentUser.email
             }
         }).then(response => {
-            console.log(response.data.Pandas);
-            let updatedArray = []
-            for(var key in response.data){
-                updatedArray.push(key)
-            setChartDataIdentifier(updatedArray);
+            if(Object.keys(response.data).length === 0){
+                setUserHasCharts(false);
             }
-            setChartData(response.data);
+            else{
+                let updatedArray = []
+                for(var key in response.data){
+                    updatedArray.push(key)
+                setChartDataIdentifier(updatedArray);
+                }
+                setChartData(response.data);
+            }
+            
         })
     },[])
 
     useEffect(() => {
         if(chartData !== undefined) {
+            // TODO need to check if user has only 1 recent chart and be more dynamic 
             setCumulatedChart1Data(calculateAverageData("sentiment", chartDataIdentifier[0])!);
             setCumulatedChart2Data(calculateAverageData("sentiment", chartDataIdentifier[0])!);
             setLoading(false);
@@ -124,35 +133,45 @@ export default function Homepage(props: any){
         <Box sx={{margin:2, width:'80%', padding:3, height:'100%', flexShrink:"1"}}>
             <Typography variant="h3">{getTime()} {context.currentUser.firstname}</Typography>
             <Divider sx={{marginTop:2, marginBottom:2}} />
-            <Typography variant="h5">Jump Back In</Typography>
-            <Box>
-                <Stack direction="row" spacing={2}>
-                    <Box sx={{width:"50%"}}>
-                        <ButtonGroup size="small" disabled={loading}>
-                            <Button onClick={() =>{downloadChart(firstChartRef, "FirstChart")}}>Export Chart</Button>
-                            <Button>Export Dataset</Button>
-                            <Button>Edit Dataset</Button>
-                        </ButtonGroup>
-                        <Stack direction="row" spacing={2}>
-                        {loading? <Box sx={{height: '400px', width: '100%', display: 'flex', alignItems: "center", justifyContent: "center"}}><CircularProgress /></Box>:
-                            <Charts cref={firstChartRef} chartType="Bar" chartHeader={`${chartDataIdentifier[0]} Sentiment Results`} chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={getDataForPlot(cumulatedChart1Data)} labels={getLabelsForPlot(cumulatedChart1Data)}/>
-                        }
-                        </Stack>
-                    </Box>
-                    <Box sx={{width:"50%"}}>
-                        <ButtonGroup size="small" disabled={loading}>
-                            <Button onClick={() =>{downloadChart(secondChartRef, "SecondChart")}}>Export Chart</Button>
-                            <Button>Export Dataset</Button>
-                            <Button>Edit Dataset</Button>
-                        </ButtonGroup>
-                        <Stack direction="row" spacing={2}>
+
+            {userHasCharts? 
+            <>
+                <Typography variant="h5">Jump Back In</Typography>
+                <Box>
+                    <Stack direction="row" spacing={2}>
+                        <Box sx={{width:"50%"}}>
+                            <ButtonGroup size="small" disabled={loading}>
+                                <Button onClick={() =>{downloadChart(firstChartRef, "FirstChart")}}>Export Chart</Button>
+                                <Button>Export Dataset</Button>
+                                <Button>Edit Dataset</Button>
+                            </ButtonGroup>
+                            <Stack direction="row" spacing={2}>
                             {loading? <Box sx={{height: '400px', width: '100%', display: 'flex', alignItems: "center", justifyContent: "center"}}><CircularProgress /></Box>:
-                                <Charts cref={secondChartRef} chartType="Bar" chartHeader={`${chartDataIdentifier[1]} Sentiment Results`} chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={getDataForPlot(cumulatedChart2Data)} labels={getLabelsForPlot(cumulatedChart2Data)}/>
+                                <Charts cref={firstChartRef} chartType="Bar" chartHeader={`${chartDataIdentifier[0]} Sentiment Results`} chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={getDataForPlot(cumulatedChart1Data)} labels={getLabelsForPlot(cumulatedChart1Data)}/>
                             }
                             </Stack>
-                    </Box>   
-                </Stack>                 
+                        </Box>
+                        <Box sx={{width:"50%"}}>
+                            <ButtonGroup size="small" disabled={loading}>
+                                <Button onClick={() =>{downloadChart(secondChartRef, "SecondChart")}}>Export Chart</Button>
+                                <Button>Export Dataset</Button>
+                                <Button>Edit Dataset</Button>
+                            </ButtonGroup>
+                            <Stack direction="row" spacing={2}>
+                                {loading? <Box sx={{height: '400px', width: '100%', display: 'flex', alignItems: "center", justifyContent: "center"}}><CircularProgress /></Box>:
+                                    <Charts cref={secondChartRef} chartType="Bar" chartHeader={`${chartDataIdentifier[1]} Sentiment Results`} chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={getDataForPlot(cumulatedChart2Data)} labels={getLabelsForPlot(cumulatedChart2Data)}/>
+                                }
+                                </Stack>
+                        </Box>   
+                    </Stack>        
+                </Box>
+            </>
+            :
+            <Box sx={{width: '100%', height: '400px', display:"flex", alignItems: 'center', justifyContent: 'center'}}>
+                <SentimentVeryDissatisfiedIcon color="error" sx={{fontSize:"70px"}}/>
+                <Typography variant="h4">Looks like you havent analysed any data yet</Typography>
             </Box>
+            }         
         </Box>
         
     )
