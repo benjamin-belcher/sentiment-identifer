@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useContext, useCallback, useRef} from "react";
 import {
     Box, 
     Divider, 
@@ -30,6 +30,7 @@ import "./styles.css";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../util/UserContext";
 import { UserContextType } from "../../util/UserContextType";
+import { LoadingButton } from "@mui/lab";
 
 export default function NewAnalysisPage(){
     const [activeStep, setActiveStep] = React.useState(0);
@@ -43,7 +44,16 @@ export default function NewAnalysisPage(){
     const [chartType, setChartType] = React.useState("Bar");
     const context = useContext(UserContext) as UserContextType;
     const [keywords, addKeywords] = React.useState<string[]>([]);
+    const [loading, setLoading] = React.useState(false);
+    const SentimentChartRef = useRef<any>(null);
+    const SubjectivityChartRef = useRef<any>(null);
     const navigate = useNavigate();
+
+    const DownloadOptions = { 
+        SaveAll: "Save All",
+        SaveAnalysed: "Save Analysed Results",
+        SaveSubject: "Save Subjectivity Results"
+    }
     
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -90,9 +100,11 @@ export default function NewAnalysisPage(){
     }
 
     const startAnalysis = () => {
+        setLoading(true);
         axios.post(APIEndpoint+"analyse", {"data":{"tweets":dataToDisplay?.rows, "email": context.currentUser.email, "keyword":keywords[0]}})
             .then(response => {
                 setAnalysedData(response.data); 
+                setLoading(false);
                 handleNext()});
     }
 
@@ -141,6 +153,29 @@ export default function NewAnalysisPage(){
         setChartType(e.target.value as string);
     }
 
+    const handleDownloadChart = (whichChart: string) => {
+        switch(whichChart) {
+            case DownloadOptions.SaveAll:
+                downloadChart(SentimentChartRef, `${keywords[0]}-Sentiment-Analysis-Chart.png`);
+                downloadChart(SubjectivityChartRef, `${keywords[0]}-Subjectivity-Analysis-Chart.png`);
+                break;
+            case DownloadOptions.SaveAnalysed:
+                downloadChart(SentimentChartRef, `${keywords[0]}-Sentiment-Analysis-Chart.png`);
+                break;
+            case DownloadOptions.SaveSubject:
+                downloadChart(SubjectivityChartRef, `${keywords[0]}-Subjectivity-Analysis-Chart.png`);
+                break;
+        }
+    }
+
+    const downloadChart = useCallback((chartRef: any, filename: string) => {
+        const link = document.createElement("a");
+        link.download = filename;
+        link.href = chartRef?.current?.toBase64Image();
+        
+        link.click();
+    }, []) 
+
     const steps=[
         {
             element:(
@@ -174,7 +209,7 @@ export default function NewAnalysisPage(){
                     <DataTable columns={dataToDisplay?.columns} rows={dataToDisplay?.rows} />
                     <Stack direction="row" justifyContent="space-between">
                         <Button variant="contained" sx={{marginTop:1, marginBottom:4}} onClick={() =>{handleBack(); setDataToDisplay(undefined)}}>Back</Button>
-                        <Button variant="contained" sx={{marginTop:1, marginBottom:4}} onClick={() =>{startAnalysis()}}>Analyse</Button>
+                        <LoadingButton loading={loading} variant="contained" sx={{marginTop:1, marginBottom:4}} onClick={() =>{startAnalysis()}}>Analyse</LoadingButton>
                     </Stack>
 
                     
@@ -194,7 +229,7 @@ export default function NewAnalysisPage(){
                     </Stack>
                     
                     <Box sx={{display: 'flex', height:"fit-content"}}>
-                        <DropdownButton options={["Save Analysed Data", "Save Charts", "Save All"]} />
+                        <DropdownButton handleDownloadChart={(chart: string) => {handleDownloadChart(chart)}} options={[DownloadOptions.SaveAll, DownloadOptions.SaveAnalysed, DownloadOptions.SaveSubject]} />
                         <Button variant="contained" sx={{marginLeft:"1rem"}} onClick={() => {handleStartNewAnalysis()}}>Start Again</Button>
                     </Box>
                     
@@ -221,8 +256,8 @@ export default function NewAnalysisPage(){
                     <Box sx={{width:"50%"}}>
                         {haveData?
                             <Stack direction="row">
-                                <Charts chartType={chartType} chartHeader="Sentiment Results" chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={getSentimentData()} labels={getSentimentLabels()}/>
-                                <Charts chartType={chartType} chartHeader="Subjectivity Results" chartBackgroundColor="rgba(227, 0, 114, 0.8)" data={getSubjectivityData()} labels={getSubjectivityLabels()} />
+                                <Charts cref={SentimentChartRef} chartType={chartType} chartHeader={`${keywords[0]} Sentiment Results`} chartBackgroundColor="rgba(5, 109, 120, 0.8)" data={getSentimentData()} labels={getSentimentLabels()}/>
+                                <Charts cref={SubjectivityChartRef} chartType={chartType} chartHeader={`${keywords[0]} Subjectivity Results`} chartBackgroundColor="rgba(227, 0, 114, 0.8)" data={getSubjectivityData()} labels={getSubjectivityLabels()} />
                             </Stack>
                         :
                         <></>}

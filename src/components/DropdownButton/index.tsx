@@ -13,10 +13,10 @@ import { IDropdownButtonProps } from '../../interfaces/props/IDropdownButtonProp
 export default function DropdownButton(props: IDropdownButtonProps){
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef<HTMLDivElement>(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
 
     const handleClick = () => {
-        console.info(`You clicked ${props.options[selectedIndex]}`);
+      props.handleDownloadChart(props.options[selectedIndex]);
     };
 
     const handleMenuItemClick = (
@@ -24,6 +24,7 @@ export default function DropdownButton(props: IDropdownButtonProps){
         index: number,
     ) => {
         setSelectedIndex(index);
+        props.handleDownloadChart(props.options[index]);
         setOpen(false);
     };
 
@@ -44,7 +45,7 @@ export default function DropdownButton(props: IDropdownButtonProps){
     
     return(
     <>
-    <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button" disabled>
+    <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
       <Button onClick={handleClick}>{props.options[selectedIndex]}</Button>
       <Button
         size="small"

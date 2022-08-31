@@ -34,9 +34,6 @@ export default function GoogleLoginComponent(props: any){
             email: googleUser.getBasicProfile().getEmail(),
             profileImg:googleUser.getBasicProfile().getImageUrl(),
         }
-
-       
-
         // Validate if user already exists
         axios.get(APIEndpoint+"user/find", {
             params: {

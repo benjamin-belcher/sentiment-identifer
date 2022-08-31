@@ -19,6 +19,7 @@ export default function Charts(props: IChartsProps) {
   
     return(
         <Chart
+            style={{backgroundColor: '#ffffff'}}
             type={ReturnChartType(props.chartType)}
             ref={props.cref}
             datasetIdKey='id'
